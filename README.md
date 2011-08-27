@@ -20,10 +20,16 @@ Finally, you'll need a browser that can handle data: URLs. Note that less-than-r
 
 ## Using Squidpeek
 
+The command-line interface is like this:
+
 > % squidpeek.py [-q] [-n num] logfile
 >   -q  use the query string as part of the URI
 >   -n [num] show the top num URLs (default: 100)
 
+Typically, you'd use squidpeek in a cron job, like this:
+
+> # run once an hour; assumes logs are rotated right beforehand
+> 2 * * * * root squidpeek /var/log/squid/access_log
 
 ## Support and Contributions
 
