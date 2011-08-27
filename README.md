@@ -7,11 +7,15 @@ This is a quick and dirty script for getting cool per-URL statistics and sparkli
 
 Because it's per-URL, it's most appropriate for use with gateways (aka "reverse proxies").
 
-## Requirements
+## Requirements and Installation
 
 Squidpeek needs Python 2.5 or greater; see <http://python.org/>. 
 
 You'll also need the Python Imaging Library (PIL); see <http://www.pythonware.com/products/pil/>.
+
+The easy way to install is with pip;
+
+> pip install squidpeek
 
 Obviously, you also need some Squid logs; see <http://squid-cache.org/>. Other programs that generate Squid logs (e.g., Traffic Server) may or may not work, depending on how faithfully they follow the format's semantics.
 
