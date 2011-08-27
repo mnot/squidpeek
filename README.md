@@ -7,6 +7,9 @@ This is a quick and dirty script for getting cool per-URL statistics and sparkli
 
 Because it's per-URL, it's most appropriate for use with gateways (aka "reverse proxies").
 
+For a sample of its output, see <http://mnot.github.com/squidpeek/>.
+  
+
 ## Requirements and Installation
 
 Squidpeek needs Python 2.5 or greater; see <http://python.org/>. 
