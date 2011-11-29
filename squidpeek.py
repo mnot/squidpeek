@@ -28,14 +28,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-__version__ = "1.2"
+__version__ = "1.4"
 
 import sys
 import os
 import time
 import urlparse
 import urllib
-import md5
+import hashlib
 import re
 import socket
 from UserDict import UserDict
@@ -57,24 +57,36 @@ SERVER_FAIL = 7 # problem getting to the server
 CLIENT_NOCACHE = 8 # client asked us not to
 ASYNC = 9 # background fetch; not client-related
 NEGATIVE_HIT = 10 # cached error
+CLIENT_ERR = 11 # client-side problem   # TODO: not currently used
 
 log_tags = {
     'TCP_HIT': [HIT],
     'TCP_MISS': [MISS],
     'TCP_REFRESH_HIT': [MISS, SERVER_VALIDATE, SERVER_VALIDATE_YES],
     'TCP_REFRESH_FAIL_HIT': [MISS, SERVER_VALIDATE, SERVER_FAIL],
+    'TCP_REF_FAIL_HIT': [MISS, SERVER_VALIDATE, SERVER_FAIL],
     'TCP_REFRESH_MISS': [MISS, SERVER_VALIDATE],
     'TCP_CLIENT_REFRESH_MISS': [MISS, CLIENT_NOCACHE],
-    'TCP_IMS_HIT': [HIT], 
+    'TCP_CLIENT_REFRESH': [MISS, CLIENT_NOCACHE],
+    'TCP_IMS_HIT': [HIT],
+    'TCP_IMS_MISS': [MISS], 
     'TCP_SWAPFAIL_MISS': [MISS],
+    'TCP_SWAPFAIL': [MISS],
     'TCP_NEGATIVE_HIT': [HIT, NEGATIVE_HIT], 
     'TCP_MEM_HIT': [HIT, MEMORY_HIT],
-    'TCP_DENIED': [],
-    'TCP_OFFLINE_HIT': [],
+    'TCP_DENIED': [CLIENT_ERR],
+    'TCP_OFFLINE_HIT': [HIT],
     'NONE': [MISS, SERVER_FAIL], # ?
     'TCP_STALE_HIT': [HIT, STALE_HIT],
     'TCP_ASYNC_HIT': [ASYNC],
     'TCP_ASYNC_MISS': [ASYNC],
+    'ERR_CLIENT_ABORT': [CLIENT_ERR],
+    'ERR_CONNECT_FAIL': [SERVER_FAIL],
+    'ERR_DNS_FAIL': [SERVER_FAIL],
+    'ERR_INVAID_REQ': [CLIENT_ERR],
+    'ERR_READ_TIMEOUT': [SERVER_FAIL],
+    'ERR_PROXY_DENIED': [CLIENT_ERR],
+    'ERR_UNKNOWN': [CLIENT_ERR],
 }
 
 status_colors = {
@@ -121,7 +133,15 @@ def main(fh, num_urls=100, ignore_query=True, debug=False):
             tmp['status'][line['status'] / 100] += 1
         except KeyError:
             tmp['status'][line['status'] / 100] = 1
-        tag_types = log_tags[line['log_tag']]
+        try:
+            tag_types = log_tags[line['log_tag']]
+        except KeyError:
+            if debug:
+                sys.stderr.write(
+                    "Unknown log tag %s (line %s)" % (
+                        line['log_tag'], log.num_processed
+                ))
+            continue
         if MISS in tag_types:
             tmp['elapsed'].append(line['elapsed'])                
         try:
@@ -463,7 +483,7 @@ that the median is at least that amount.</p>
 </body></html>"""
 
 def hashUrl(url):
-    return md5.new(url).digest()
+    return hashlib.md5(url).digest()
 
 
 TOKEN = r'(?:[^\(\)<>@,;:\\"/\[\]\?={} \t]+?)'

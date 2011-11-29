@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from distutils.core import setup
-version = "1.3"
+from squidpeek import __version__ as version
 
 setup(
   name = 'squidpeek',
