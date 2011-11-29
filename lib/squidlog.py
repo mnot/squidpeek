@@ -93,7 +93,7 @@ class AccessParser:
                         i = 0
                         for field in n[10:]:
                             i += 1
-                            n['extra_%s' % i] = field
+                            o['extra_%s' % i] = field
                 return o
             except Exception, why:
                 self.num_error = self.num_error + 1
