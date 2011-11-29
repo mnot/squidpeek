@@ -57,9 +57,10 @@ class AccessParser:
     _mime_hasher = compile("([\w\-_]+):\s*(.*)$")
     _time_headers = ['date', 'last-modified', 'expires']
 
-    def __init__(self, file_descriptor, parse_headers=False):
+    def __init__(self, file_descriptor, parse_headers=False, debug=False):
         self._fd = file_descriptor
         self.parse_headers = parse_headers
+        self.debug = debug
         self.num_processed = 0
         self.num_error = 0
 
@@ -94,8 +95,12 @@ class AccessParser:
                             i += 1
                             n['extra_%s' % i] = field
                 return o
-            except:
+            except Exception, why:
                 self.num_error = self.num_error + 1
+                if self.debug:
+                    sys.stderr.write("PARSE ERROR line %s: %s\n" % (
+                        self.num_processed, why
+                    ))
                 continue        
 
     def _parse_mime(self, raw):

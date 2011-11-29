@@ -87,8 +87,8 @@ status_colors = {
 
 unknown_color = (192,192,192,0)
 
-def main(fh, num_urls=100, ignore_query=True):
-    log = SquidAccessParser(fh)
+def main(fh, num_urls=100, ignore_query=True, debug=False):
+    log = SquidAccessParser(fh, debug=debug)
     urls = {}
     hot_urls = CacheDict(urls, max_size=max(2000, 10*num_urls), trim_to=.5)
     first_utime = None
@@ -553,15 +553,16 @@ class CacheDict(UserDict):
 def usage():
     print """\
 Usage: %s [-n num] [-q] logfile 
+          -d      Debug parse errors
           -n num  Number of URLs to report (default: 100)
-          -q      use the query string as part of the URI
+          -q      Use the query string as part of the URI
          logfile  Squid access log, or '-' for STDIN
 """ % sys.argv[0]
     sys.exit(1)
 
 if __name__ == '__main__':
     import getopt
-    opts, args = getopt.getopt(sys.argv[1:], "qn:")
+    opts, args = getopt.getopt(sys.argv[1:], "dqn:")
     opts = dict(opts)
     try:
         fh = open(args[0])
@@ -573,6 +574,10 @@ if __name__ == '__main__':
         else:
             sys.stderr.write("IO Error: %s\n" % msg)
             sys.exit(1)
+    if opts.has_key('-d'):
+        debug = True
+    else:
+        debug = False
     if opts.has_key('-n'):
         num_urls = int(opts['-n'])
     else:
@@ -582,6 +587,6 @@ if __name__ == '__main__':
     else:
         ignore_query = True
     try:
-        main(fh, num_urls, ignore_query)
+        main(fh, num_urls, ignore_query, debug)
     except KeyboardInterrupt:
         sys.exit(0)
