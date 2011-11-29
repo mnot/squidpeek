@@ -30,7 +30,8 @@ Finally, you'll need a browser that can handle data: URLs. Note that less-than-r
 The command-line interface is like this:
 
     % squidpeek.py [-q] [-n num] logfile
-        -q  use the query string as part of the URI
+        -d Debug parse errors
+        -q use the query string as part of the URI
         -n [num] show the top num URLs (default: 100)
 
 Typically, you'd use squidpeek in a cron job, like this:
