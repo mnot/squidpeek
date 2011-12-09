@@ -16,6 +16,7 @@ setup(
   package_dir = {'squidpeek_lib': 'lib'},
   scripts = ['squidpeek.py'],
   install_requires = ['PIL > 1.1.4'],
+  long_description=open("README.rst").read(),
   classifiers = [
     'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Developers',
