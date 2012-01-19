@@ -28,7 +28,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-__version__ = "1.4"
+__version__ = "1.5"
 
 import sys
 import os
@@ -40,9 +40,6 @@ import re
 import socket
 from UserDict import UserDict
 
-from squidpeek_lib.squidlog import AccessParser as SquidAccessParser
-from squidpeek_lib.sparkogram import Sparkogram
-from squidpeek_lib.sparkbar import Sparkbar
 
 max_url_len = 96
 
@@ -100,6 +97,9 @@ status_colors = {
 unknown_color = (192,192,192,0)
 
 def main(fh, num_urls=100, ignore_query=True, debug=False):
+    from squidpeek_lib.squidlog import AccessParser as SquidAccessParser
+    from squidpeek_lib.sparkogram import Sparkogram
+    from squidpeek_lib.sparkbar import Sparkbar
     log = SquidAccessParser(fh, debug=debug)
     urls = {}
     hot_urls = CacheDict(urls, max_size=max(2000, 10*num_urls), trim_to=.5)
