@@ -7,7 +7,7 @@ Mark Nottingham <mnot@mnot.net>
 """
 
 __license__ = """
-Copyright (c) 2006 Mark Nottingham <mnot@pobox.com>
+Copyright (c) 2006-2013 Mark Nottingham <mnot@pobox.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-__version__ = "1.5"
+__version__ = "1.5.1"
 
 import sys
 import os
